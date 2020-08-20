@@ -1,0 +1,97 @@
+#code is reliable until white square is pushed off the top of the screen!?
+#fixed
+import pygame, sys
+
+def bouncing_rect():
+    global x_vel, y_vel, x2_vel, y2_vel
+    collision_tolerance = 10
+
+    #moving moving_rect
+    moving_rect.x += x_vel
+    moving_rect.y += y_vel
+
+    #collision with screen borders
+    # if moving_rect.right >= screen_w or moving_rect.left <= 0:
+    #     x_vel *= - 1
+    # if moving_rect.bottom >= screen_w or moving_rect.top <= 0:
+    #     y_vel *= - 1
+
+    #updated to include velocity!
+
+    if moving_rect.right >= screen_w and x_vel > 0:
+        #print("bonk right")
+        x_vel *= -1
+    if moving_rect.left <= 0 and x_vel < 0:
+        #print("bonk left")
+        x_vel *= -1
+    if moving_rect.bottom >= screen_w and y_vel > 0:
+        #print("bonk bottom")
+        y_vel *= - 1
+    if moving_rect.top <= 0 and y_vel < 0:
+        #print("bonk top")
+        y_vel *= - 1
+
+    # moving other_rect
+    other_rect.y += y2_vel
+    other_rect.x += x2_vel
+
+    #collisions with borders
+
+    if other_rect.right >= screen_w and x2_vel > 0:
+        x2_vel *= - 1
+    if other_rect.left <= 0 and x2_vel < 0:
+        x2_vel *= - 1
+    if other_rect.bottom >= screen_w and y2_vel > 0:
+        y2_vel *= - 1
+    if other_rect.top <= 0 and y2_vel < 0:
+        y2_vel *= - 1
+
+    #collision with other_rect
+
+    if moving_rect.colliderect(other_rect):   # check any collision
+        if abs(other_rect.top - moving_rect.bottom) < collision_tolerance and y_vel > 0: #check where collision is
+            y_vel *= -1
+        if abs(other_rect.bottom - moving_rect.top) < collision_tolerance and y_vel < 0:  # check where collision is
+            y_vel *= -1
+        if abs(other_rect.left - moving_rect.right) < collision_tolerance and x_vel > 0:  # check where collision is
+            x_vel *= -1
+        if abs(other_rect.right - moving_rect.left) < collision_tolerance and x_vel < 0: #check where collision is
+            x_vel *= -1
+
+    #other_rect collision with moving_rect
+
+    if other_rect.colliderect(moving_rect):   # check any collision
+        if abs(moving_rect.top - other_rect.bottom) < collision_tolerance and y2_vel > 0: #check where collision is
+            y2_vel *= -1
+        if abs(moving_rect.bottom - other_rect.top) < collision_tolerance and y2_vel < 0:  # check where collision is
+            y2_vel *= -1
+        if abs(moving_rect.left - other_rect.right) < collision_tolerance and x2_vel > 0:  # check where collision is
+            x2_vel *= -1
+        if abs(moving_rect.right - other_rect.left) < collision_tolerance and x2_vel < 0: #check where collision is
+            x2_vel *= -1
+
+    pygame.draw.rect(screen, (255, 255, 255), moving_rect)
+    pygame.draw.rect(screen, (255, 0, 0), other_rect)
+
+pygame.init()
+clock = pygame.time.Clock()
+screen_w, screen_h = 800, 800
+screen = pygame.display.set_mode((screen_w, screen_h))
+
+moving_rect = pygame.Rect(350, 350, 150, 150)
+x_vel, y_vel = 5, 4
+
+other_rect = pygame.Rect(300, 600, 150, 150)
+x2_vel = 6
+y2_vel = 5
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    screen.fill((30, 30, 30))
+    bouncing_rect()
+    pygame.display.flip()
+    clock.tick(60)
