@@ -8,7 +8,7 @@ I had the idea to include sounds on each collision to create a minimal virtual s
 
 My inital code (collision_test_1) was based loosely around a previous tutorial and included images and use of a character class, but things became untidy and I ran into several issues which became difficult to fix in a code that was becoming more and more untidy.
 
-To increase my understanding of the collision physics I watched another tutorial and created a new code,
+To increase my understanding of the collision physics I watched another tutorial and created a new code (collision_test_2),
 which used rects (basic shapes) and implemented a neater collision method, between boundaries and two independently moving objects.
 https://www.youtube.com/watch?v=1_H7InPMjaY&list=PL8ui5HK3oSiHnIdi0XIAVXHAeulNmBrLy&index=9&t=0s
 
