@@ -1,0 +1,119 @@
+import pygame
+import pygame.midi
+from note_class import Note
+
+
+pygame.init()
+pygame.midi.init()
+#
+player = pygame.midi.Output(0)
+#
+player.set_instrument(15)
+
+screenwidth, screenlength = 1000, 700
+
+screen = pygame.display.set_mode((screenwidth, screenlength))
+pygame.display.set_caption("Paul's stuff")
+
+BG = pygame.transform.scale(pygame.image.load("BG_grey.png"), (screenwidth, screenlength))
+CHAR = pygame.image.load("char.png")
+CHAR2 = pygame.image.load("char2.png")
+
+class Char:
+    def __init__(self, x, y, velh, velv, char_img, note):
+        self.x = x
+        self.y = y
+        self.char_img = char_img
+        self.velv = velv
+        self.velh = velh
+        self.hitbox = (self.x, self.y, 80, 80)
+        self.note = note
+
+    def draw(self, window):
+        self.move()
+        screen.blit(self.char_img, (self.x, self.y))
+        self.hitbox = (self.x, self.y, 80, 80)
+        #visualise hit box v
+        pygame.draw.rect(screen, (255,0,0), self.hitbox, 2)
+
+    def move(self):
+#horizontal
+        if self.velh > 0:
+            if self.x + self.velh < screenwidth - 60:
+                 self.x += self.velh
+            else:
+                self.velh = self.velh * -1
+        else:
+            if self.x - self.velh > 0:
+                self.x += self.velh
+            else:
+                self.velh = self.velh * -1
+#vertical
+        if self.velv > 0:
+            if self.y + self.velv < screenlength - 60:
+                 self.y += self.velv
+            else:
+                self.velv = self.velv * -1
+        else:
+            if self.y - self.velv > 0:
+                self.y += self.velv
+            else:
+                self.velv = self.velv * -1
+
+#create sound as ball hits sides
+#each side different note? or each ball
+#why is it bonking twice?! # fix with vel neg or pos value
+
+        if self.x == (940 - self.velh) and self.velh > 0:
+            print("bonk1")
+            player.note_on(self.note, 120, 0)
+
+
+        if self.x == 0 and self.velh < 0:
+            print("bonk2")
+            player.note_on(self.note, 120, 0)
+
+
+        if self.y == (640 - self.velv) and self.velv > 0:
+            print("bonk3")
+            player.note_on(self.note, 120, 0)
+
+
+        if self.y == 0 and self.velv < 0:
+            print("bonk4")
+            player.note_on(self.note, 120, 0)
+
+
+
+def main_run():
+    run = True
+    fps = 60
+    sphere = Char(0, 0, 2, 2, CHAR, 57)
+    sphere2 = Char(1000, 0, 10, 8, CHAR2, 69)
+    #name = characterclass(start pos x, y, velv, velh, image)
+    vel = 1
+
+    clock = pygame.time.Clock()
+
+    def redraw_window():
+        screen.blit(BG, (0, 0))
+
+        sphere.draw(screen) #Char class object, method contains move and blits to screen
+        sphere2.draw(screen)
+
+        pygame.display.update()
+
+    while run:
+        clock.tick(fps)
+        redraw_window()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+main_run()
+
+del player
+pygame.midi.quit()
+pygame.quit()
+
