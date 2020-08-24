@@ -16,3 +16,4 @@ I ran the code but eventually found several glitches that would occur, including
 
 I then increased the movement of the second shape to increase the number and variety of object collisions, and then modified it so that its trajectory was affected by the first shape.
 
+The code was becoming inconcise and messy so I updated it by creating a class (collision_class test)
