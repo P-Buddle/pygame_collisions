@@ -1,0 +1,98 @@
+#code is reliable until white square is pushed off the top of the screen!?
+#fixed
+import pygame, sys
+
+class Square:
+    """class that creates a square that moves at a set velocity, collides with boundaries and other squares"""
+    def __init__(self, x, y, width, height, x_vel, y_vel, color):
+        self.x_vel = x_vel
+        self.y_vel = y_vel
+        self.width = width
+        self.height = height
+        self.x = x
+        self.y = y
+        self.collision_tolerance = 10
+        self.color = color
+        # other_rect recognisable as collision object by other instances
+        self.other_rect = pygame.Rect(self.x, self.y, self.height, self.width)
+
+    def draw(self, window):
+
+        self.other_rect = pygame.Rect(self.x, self.y, self.height, self.width)
+        self.shap = pygame.Rect(self.x, self.y, self.height, self.width)
+        self.shapee = pygame.draw.rect(window, self.color, self.shap)
+        self.move()
+
+    def move(self):
+
+        #move
+        self.x += self.x_vel
+        self.y += self.y_vel
+
+        #boundary collisions
+        
+        #check right
+        if self.shap.right >= screen_w and self.x_vel > 0:
+            self.x_vel *= -1
+        # check left
+        if self.shap.left <= 0 and self.x_vel < 0:
+            self.x_vel *= - 1
+        # check bottom
+        if self.shap.bottom >= screen_w and self.y_vel > 0:
+            self.y_vel *= - 1
+        # check top
+        if self.shap.top <= 0 and self.y_vel < 0:
+            self.y_vel *= - 1
+
+        #object collisions
+
+    def collisions(self, collisee):
+# check collision with bottom
+        if self.shap.colliderect(collisee):  # check any collision
+            if abs(collisee.top - self.shap.bottom) < self.collision_tolerance and self.y_vel > 0:
+                self.y_vel *= -1
+# check collision with top
+            if abs(collisee.bottom - self.shap.top) < self.collision_tolerance and self.y_vel < 0:
+                self.y_vel *= -1
+#check collision with right
+            if abs(collisee.left - self.shap.right) < self.collision_tolerance and self.x_vel > 0:
+                self.x_vel *= -1
+#check collision with left
+            if abs(collisee.right - self.shap.left) < self.collision_tolerance and self.x_vel < 0:
+                self.x_vel *= -1
+
+# Define some colors
+black = (0,0,0)
+white = (255, 255, 255)
+red = (255,0, 0)
+
+
+pygame.init()
+clock = pygame.time.Clock()
+screen_w, screen_h = 800, 800
+screen = pygame.display.set_mode((screen_w, screen_h))
+
+#call Square objects
+square = Square(10, 10, 50, 50, 5, 3, white)
+square2 = Square(100, 100, 50, 50, 3, 5, red)
+
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    screen.fill((30, 30, 30))
+
+# draw square object, then check it for collisions with other square objects
+    #square one
+    square.draw(screen)
+    square.collisions(square2.other_rect)
+    #square two
+    square2.draw(screen)
+    square2.collisions(square.other_rect)
+  
+
+    pygame.display.flip()
+    clock.tick(60)
