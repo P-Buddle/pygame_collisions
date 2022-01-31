@@ -1,7 +1,11 @@
 # pygame_collisions
 
 
-The most recent version of the project is draw_square_function, which includes a user input (via number keys) to select from 1 - to 9 squares.
+The most recent version of the project is collisions.py which includes a user input (via number keys) to select from 1 - to 9 squares.
+
+
+
+
 
 learning basic collision physics in pygames
 
