@@ -1,3 +1,6 @@
+# LINK TO DEMO 
+# https://youtu.be/prIZ-BxhF-U
+
 # square collisions increase speed, boundary collisions decrease
 # number bttons add squares
 # add button to increase default vel?
